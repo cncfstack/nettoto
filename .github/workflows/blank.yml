@@ -25,7 +25,7 @@ jobs:
           set -x
           pwd
           touch ./m1
-          echo ${{ secrets.M1 }} > ./m1
+          echo "${{ secrets.M1 }}" > ./m1
           ls -lha
           sudo chmod 400 ./m1
           sudo docker run -itd --name squid  -v "`pwd`/squid.conf:/etc/squid/squid.conf" -p 3128:3128  docker.io/ubuntu/squid
