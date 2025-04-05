@@ -38,5 +38,6 @@ jobs:
           chmod 600 ~/.ssh/authorized_keys
 
           ls -lh ~/.ssh/
+             
 
-          ssh  -N -f -g -o ServerAliveInterval=60 -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i ./testrsa -D 9999 root@localhost 
+          ssh  -N -f -g -o ServerAliveInterval=60 -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i ./testrsa -D 9999 localhost 
