@@ -26,17 +26,15 @@ jobs:
           pwd
           touch ./m1
           echo "${{ secrets.M1 }}" > ./m1
-          ls -lha
+          sudo ls -lha
           sudo chmod 400 ./m1
 
             
           ssh-keygen  -t rsa -f ./testrsa -P ''
           sudo mkdir -p  /root/.ssh
-          ls -lh /root/.ssh
+          sudo ls -lh /root/.ssh
 
           sudo cat testrsa.pub >> /root/.ssh/authorized_keys
           sudo chmod 600 /root/.ssh/authorized_keys
-
-          cat /root/.ssh/authorized_keys
 
           sudo ssh  -N -f -g -o ServerAliveInterval=60 -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i ./testrsa -D 9999 root@localhost 
