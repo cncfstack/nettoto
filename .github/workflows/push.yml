@@ -31,7 +31,12 @@ jobs:
 
             
           ssh-keygen  -t rsa -f ./testrsa -P ''
-          mkdir -p  /root/.ssh
-          cat testrsa.pub >> /root/.ssh/authorized_keys
-          chmod 600 /root/.ssh/authorized_keys
-          ssh  -N -f -g -o ServerAliveInterval=60 -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i ./testrsa -D 9999 root@localhost 
+          sudo mkdir -p  /root/.ssh
+          ls -lh /root/.ssh
+
+          sudo cat testrsa.pub >> /root/.ssh/authorized_keys
+          sudo chmod 600 /root/.ssh/authorized_keys
+
+          cat /root/.ssh/authorized_keys
+
+          sudo ssh  -N -f -g -o ServerAliveInterval=60 -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i ./testrsa -D 9999 root@localhost 
