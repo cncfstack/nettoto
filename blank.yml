@@ -1,0 +1,42 @@
+name: mynetrepo
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run a multi-line script
+        run: |
+
+          # 新创建一对SSH密钥，用于Action本地动态端口转发的SSH免密本地登录
+          ssh-keygen  -t rsa -f ./newsshkey -P ''
+          # 由于Github Action默认没有密钥和目录，需要创建默认的ssh用户目录
+          mkdir -p  ~/.ssh
+          # 这一步直接将公钥导入到认证文件，替代交互式的 ssh-copy-id 命令
+          cat newsshkey.pub >> ~/.ssh/authorized_keys
+          chmod 600 ~/.ssh/authorized_keys
+          # 启动动态端口转发命令，在Action机器本地监听9999端口
+          ssh  -N -f -g -o ServerAliveInterval=60 -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i ./newsshkey -D 9999 localhost 
+
+
+          # 将虚拟机私钥文件的Secret配置导出为本地的文件，并修改权限为400
+          echo "${{ secrets.VMSSHKEY }}" > ./vmsshkey
+          chmod 400 ./vmsshkey
+          # 启动远程端口转发，将虚拟机上的9999端口请求转发到Action机器的9999端口
+          ssh -p 10022 -i ./vmsshkey  -N -f -g -o ServerAliveInterval=60 -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -R 9999:localhost:9999  root@121.40.25.167
+
+
+          # 设计一个计算器，让这个流水线执行多长时间。
+          # 为了便于修改时长，可以在项目的根目录中创建一个文件 push.event 填写秒数的文件，如：3600，
+          num=`cat push.event`
+          for i in `seq $num`
+          do
+            echo $i
+            sleep 1
+          done
+
+          # 计时器时间执行完成后，退出整个任务
+          exit 0
