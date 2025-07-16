@@ -1,5 +1,8 @@
 # netToTo
 
+通过 SSH 工具，将 Github Action 服务器设置为一个动态端口转发的服务器，类似 Socket 代理功能。
+
+然后，将该服务的端口映射到指定的一台便于访问的 SSHD 服务器上。
 
 ## Github Action 一些特性
 
