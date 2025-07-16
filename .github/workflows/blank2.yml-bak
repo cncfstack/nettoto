@@ -1,7 +1,7 @@
 name: mynetrepo
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "disable" ]
   workflow_dispatch:
 jobs:
   build:
