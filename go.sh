@@ -2,4 +2,6 @@
 DATE=$(date)
 echo "Date=>$DATE" > .date
 git add . --all && git commit -m "Date=>$DATE" && git push
+
+source /etc/profile
 sshgogogo
