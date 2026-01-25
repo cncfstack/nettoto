@@ -1,12 +1,13 @@
+name: Cron 定时同步
 on:
   schedule:
     - cron: "* */6 * * *"
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Run a multi-line script
         run: |
           # 新创建一对SSH密钥，用于Action本地动态端口转发的SSH免密本地登录
