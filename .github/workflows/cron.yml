@@ -1,4 +1,4 @@
-name: Cron 定时同步
+name: Cron
 on:
   schedule:
     - cron: "*/5 * * * *"

@@ -2,7 +2,7 @@ name: netToTo
 
 on:
   push:
-    branches: [ "disable" ]
+    branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -22,37 +22,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          set -x
-          pwd
-          touch ./m1
-          echo "${{ secrets.M1 }}" > ./m1
-          ls -lha
-          chmod 400 ./m1
-
-          ssh-keygen  -t rsa -f ./testrsa -P ''
-          mkdir -p  ~/.ssh
-
-          cat testrsa.pub >> ~/.ssh/authorized_keys
-
-
-          chmod 600 ~/.ssh/authorized_keys
-
-          ls -lh ~/.ssh/
-             
-
-          ssh  -N -f -g -o ServerAliveInterval=60 -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i ./testrsa -D 9999 localhost 
-
-          ssh  -i ./m1  -N -f -g -o ServerAliveInterval=60 -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -R 9999:localhost:9999  root@60.204.247.75
-          num=`cat push.event`
-          for i in `seq $num`
-          do
-            echo $i
-            sleep 1
-          done
-
-          exit 0
-
-
 
           # 新创建一对SSH密钥，用于Action本地动态端口转发的SSH免密本地登录
           ssh-keygen  -t rsa -f ./newsshkey -P ''
@@ -67,10 +36,10 @@ jobs:
           # 直接echo生成文件可能会失败，先创建该文件
           touch ./vmsshkey
           # 将虚拟机私钥文件的Secret配置导出为本地的文件，并修改权限为400
-          echo "${{ secrets.ALIYUN2_PRIVATE_KEY_3071 }}" > ./vmsshkey
+          echo "${{ secrets.RSA4096 }}" > ./vmsshkey
           chmod 400 ./vmsshkey
           # 启动远程端口转发，将虚拟机上的9999端口请求转发到Action机器的9999端口
-          ssh -p 26381 -i ./vmsshkey  -N -f -g -o ServerAliveInterval=60 -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -R 9999:localhost:9999  root@120.55.240.206
+          ssh -p 22 -i ./vmsshkey  -N -f -g -o ServerAliveInterval=60 -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -R 9999:localhost:9999  root@120.55.240.206
 
 
           # 设计一个计数器，让这个流水线执行多长时间。
